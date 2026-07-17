@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>美股收盤資訊圖表 · 2026/07/17</title>
+<style>
+  :root{
+    --bg:#0b0e14; --panel:#141924; --panel2:#1b2230; --line:#28303f;
+    --fg:#eef1f6; --muted:#8b93a4; --down:#ff4d4d; --downbg:rgba(255,77,77,.12);
+    --up:#25c26e; --warn:#ffb02e; --accent:#4a9eff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--fg);
+    font-family:"Noto Sans TC",-apple-system,"Segoe UI",sans-serif;
+    display:flex; justify-content:center; padding:28px 16px;
+  }
+  .poster{width:100%; max-width:920px;}
+  header{display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-bottom:6px;}
+  .title{font-size:1.9rem; font-weight:800; letter-spacing:.5px;}
+  .title .em{color:var(--down);}
+  .date{color:var(--muted); font-size:.95rem; text-align:right; line-height:1.5;}
+  .tag{display:inline-block; background:var(--downbg); color:var(--down); border:1px solid rgba(255,77,77,.35);
+       font-size:.75rem; font-weight:700; padding:3px 10px; border-radius:20px; margin-top:6px;}
+  .lead{color:var(--muted); font-size:.95rem; margin:14px 0 20px; line-height:1.6;}
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px;}
+  .card .name{color:var(--muted); font-size:.9rem; font-weight:600;}
+  .card .val{font-size:2rem; font-weight:800; margin:6px 0 2px; font-variant-numeric:tabular-nums;}
+  .card .chg{font-size:1rem; font-weight:700; color:var(--down); display:flex; align-items:center; gap:6px; font-variant-numeric:tabular-nums;}
+  .arrow{font-size:.85em;}
+  .bar{height:6px; border-radius:4px; background:var(--panel2); margin-top:12px; overflow:hidden;}
+  .bar > i{display:block; height:100%; background:linear-gradient(90deg,#ff4d4d,#ff8a3d);}
+  .row2{display:grid; grid-template-columns:1fr 2fr; gap:14px; margin-top:14px;}
+  .vix .val{color:var(--warn);}
+  .vix .chg{color:var(--warn);}
+  .week{display:flex; flex-direction:column; justify-content:center;}
+  .week .name{color:var(--muted); font-size:.9rem; font-weight:600; margin-bottom:10px;}
+  .weekrow{display:flex; justify-content:space-between; align-items:center; padding:7px 0; border-bottom:1px dashed var(--line); font-variant-numeric:tabular-nums;}
+  .weekrow:last-child{border-bottom:none;}
+  .weekrow b{color:var(--down); font-weight:700;}
+  .drivers{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; margin-top:14px;}
+  .drivers h3{font-size:1rem; margin-bottom:12px; display:flex; align-items:center; gap:8px;}
+  .drivers h3 .dot{width:8px; height:8px; border-radius:50%; background:var(--down);}
+  .drivers ul{list-style:none; display:grid; gap:10px;}
+  .drivers li{display:flex; gap:10px; font-size:.92rem; line-height:1.5; color:#d5dae4;}
+  .drivers li .k{color:var(--down); font-weight:800; flex-shrink:0;}
+  footer{margin-top:18px; color:var(--muted); font-size:.72rem; line-height:1.6;}
+  footer a{color:var(--accent); text-decoration:none;}
+  .disc{margin-top:6px; color:#6b7280;}
+  @media(max-width:640px){
+    .grid{grid-template-columns:1fr;} .row2{grid-template-columns:1fr;} .title{font-size:1.5rem;}
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+  <header>
+    <div>
+      <div class="title">美股收盤 <span class="em">全面收黑</span></div>
+      <div class="tag">▼ 半導體重挫領跌 · 三大指數同步下跌</div>
+    </div>
+    <div class="date">
+      2026 年 7 月 17 日（週五）收盤<br>
+      <span style="font-size:.82rem;">今日 7/18 為週六・美股休市</span>
+    </div>
+  </header>
+
+  <p class="lead">晶片股因市場擔憂 AI 基礎建設投資放緩而遭大舉賣出，加上地緣政治與油價走高，三大指數收低並寫下當週跌幅；Netflix 因財測顯示營收成長續緩重挫。</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="name">S&amp;P 500</div>
+      <div class="val">7,457.69</div>
+      <div class="chg"><span class="arrow">▼</span> −1.15%</div>
+      <div class="bar"><i style="width:58%"></i></div>
+    </div>
+    <div class="card">
+      <div class="name">道瓊工業指數 (Dow)</div>
+      <div class="val">52,146.42</div>
+      <div class="chg"><span class="arrow">▼</span> −406.55（−0.77%）</div>
+      <div class="bar"><i style="width:39%"></i></div>
+    </div>
+    <div class="card">
+      <div class="name">那斯達克 (Nasdaq)</div>
+      <div class="val">25,520.24</div>
+      <div class="chg"><span class="arrow">▼</span> −1.81%</div>
+      <div class="bar"><i style="width:90%"></i></div>
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="card vix">
+      <div class="name">VIX 恐慌指數</div>
+      <div class="val">18.77</div>
+      <div class="chg"><span class="arrow">▲</span> +12.19%</div>
+      <div class="bar"><i style="width:62%;background:linear-gradient(90deg,#ffb02e,#ff4d4d)"></i></div>
+    </div>
+    <div class="card week">
+      <div class="name">本週表現（過去五個交易日）</div>
+      <div class="weekrow"><span>那斯達克</span><b>−2.9%</b></div>
+      <div class="weekrow"><span>S&amp;P 500</span><b>−1.5%+</b></div>
+      <div class="weekrow"><span>道瓊工業</span><b>約 −1%</b></div>
+    </div>
+  </div>
+
+  <div class="drivers">
+    <h3><span class="dot"></span> 當日焦點</h3>
+    <ul>
+      <li><span class="k">晶片</span><span>半導體族群重挫，市場憂心 AI 超大規模業者資本支出降溫，今年漲勢反轉。</span></li>
+      <li><span class="k">個股</span><span>Netflix 暴跌約 11%，因財測預告下一季營收成長持續放緩。</span></li>
+      <li><span class="k">總體</span><span>地緣政治升溫、油價走高；VIX 單日跳升逾 12%，避險情緒轉強。</span></li>
+    </ul>
+  </div>
+
+  <footer>
+    數據來源：<a href="https://finance.yahoo.com/markets/live/stock-market-today-friday-july-17-dow-sp-500-nasdaq-092345307.html" target="_blank" rel="noopener">Yahoo Finance</a>、<a href="https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-july-17-2026" target="_blank" rel="noopener">TheStreet</a>、<a href="https://www.finsyn.com/weekly-market-recap-july-17-2026/" target="_blank" rel="noopener">Financial Synergies</a>（2026/07/17 收盤）。單日百分比依來源時點略有差異，本圖以收盤價與最常引用數值為準。
+    <div class="disc">⚠️ 本圖為市場資訊整理，非投資建議。投資有風險，決策請自行判斷或諮詢持牌顧問。</div>
+  </footer>
+</div>
+</body>
+</html>
