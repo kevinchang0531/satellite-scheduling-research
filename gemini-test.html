@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gemini API 測試頁</title>
+<style>
+  :root {
+    --bg: #0f1117; --card: #1a1d27; --line: #2a2e3a;
+    --fg: #e6e8ee; --muted: #9aa0ae; --accent: #ff8a3d; --accent2: #4a9eff;
+    --ok: #38c172; --err: #ff5c5c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px; background: var(--bg); color: var(--fg);
+    font-family: "Noto Sans TC", -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 18px; margin-bottom: 16px;
+  }
+  label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+  input[type=password], input[type=text], textarea, select {
+    width: 100%; background: #0f1117; color: var(--fg);
+    border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px;
+    font-size: 0.95rem; font-family: inherit; resize: vertical;
+  }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent2); }
+  .row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
+  .row.small { font-size: 0.85rem; color: var(--muted); }
+  button {
+    background: var(--accent); color: #1a1207; border: none; border-radius: 8px;
+    padding: 11px 20px; font-size: 0.95rem; font-weight: 700; cursor: pointer;
+  }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); font-weight: 500; }
+  #out {
+    white-space: pre-wrap; word-break: break-word; min-height: 60px;
+    background: #0f1117; border: 1px solid var(--line); border-radius: 8px; padding: 14px;
+    font-size: 0.95rem;
+  }
+  .status { font-size: 0.85rem; margin-top: 8px; }
+  .status.ok { color: var(--ok); }
+  .status.err { color: var(--err); }
+  .hint { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+  code { background: #0f1117; padding: 1px 6px; border-radius: 4px; color: var(--accent); }
+  a { color: var(--accent2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Gemini API 測試頁</h1>
+  <div class="sub">確認 Gemini 免費 API 能從網頁正常呼叫。金鑰只留在你的瀏覽器,不寫進原始碼。</div>
+
+  <div class="card">
+    <label for="key">API Key</label>
+    <input type="password" id="key" placeholder="貼上你的 Gemini API Key（AQ.… 或 AIza…）" autocomplete="off">
+    <div class="row small">
+      <label style="display:flex;align-items:center;gap:6px;margin:0;cursor:pointer;">
+        <input type="checkbox" id="remember" style="width:auto;"> 記在這台瀏覽器（localStorage）
+      </label>
+      <button class="ghost" id="clearKey" type="button">清除已記住的 Key</button>
+    </div>
+    <div class="hint">⚠️ 勾選記住會把金鑰存在瀏覽器本機。公用電腦請勿勾選。正式工具應改由後端代理呼叫,不要在前端放金鑰。</div>
+  </div>
+
+  <div class="card">
+    <label for="model">模型</label>
+    <select id="model">
+      <option value="gemini-flash-latest" selected>gemini-flash-latest（推薦，新帳號免費可用）</option>
+      <option value="gemini-flash-lite-latest">gemini-flash-lite-latest（更快更省）</option>
+      <option value="gemini-2.5-flash">gemini-2.5-flash（舊帳號才有）</option>
+    </select>
+
+    <label for="prompt" style="margin-top:14px;">提問</label>
+    <textarea id="prompt" rows="3">請用繁體中文一句話介紹你自己。</textarea>
+
+    <div class="row">
+      <button id="send">送出</button>
+      <span class="status" id="status"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <label>AI 回應</label>
+    <div id="out">（尚未送出）</div>
+  </div>
+
+  <div class="sub">
+    模型清單、額度說明見 <a href="https://ai.google.dev/gemini-api/docs" target="_blank" rel="noopener">Gemini API 文件</a>。
+    申請/撤銷金鑰:<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">AI Studio</a>。
+  </div>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const KEY_STORE = "gemini_api_key";
+
+  // 載入已記住的金鑰
+  const saved = localStorage.getItem(KEY_STORE);
+  if (saved) { $("key").value = saved; $("remember").checked = true; }
+
+  $("clearKey").addEventListener("click", () => {
+    localStorage.removeItem(KEY_STORE);
+    $("key").value = ""; $("remember").checked = false;
+    setStatus("已清除記住的金鑰。", "ok");
+  });
+
+  function setStatus(msg, cls) {
+    const el = $("status");
+    el.textContent = msg;
+    el.className = "status" + (cls ? " " + cls : "");
+  }
+
+  async function send() {
+    const key = $("key").value.trim();
+    const model = $("model").value;
+    const prompt = $("prompt").value.trim();
+
+    if (!key) { setStatus("請先貼上 API Key。", "err"); return; }
+    if (!prompt) { setStatus("請輸入提問內容。", "err"); return; }
+
+    // 記住 / 不記住
+    if ($("remember").checked) localStorage.setItem(KEY_STORE, key);
+    else localStorage.removeItem(KEY_STORE);
+
+    $("send").disabled = true;
+    setStatus("呼叫中…", "");
+    $("out").textContent = "";
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        const m = data?.error?.message || JSON.stringify(data);
+        setStatus(`錯誤 HTTP ${res.status}`, "err");
+        $("out").textContent = m;
+        return;
+      }
+
+      const text = data?.candidates?.[0]?.content?.parts?.map(p => p.text).join("") || "(無文字回應)";
+      $("out").textContent = text;
+      setStatus("✅ 成功", "ok");
+    } catch (e) {
+      setStatus("呼叫失敗（網路或 CORS）", "err");
+      $("out").textContent = String(e);
+    } finally {
+      $("send").disabled = false;
+    }
+  }
+
+  $("send").addEventListener("click", send);
+  $("prompt").addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") send();
+  });
+</script>
+</body>
+</html>

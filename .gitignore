@@ -1,0 +1,30 @@
+# 作業系統
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 編輯器 / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# 環境變數與機密
+.env
+.env.*
+!.env.example
+
+# 相依套件
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 建置與暫存輸出
+dist/
+build/
+out/
+*.log
+tmp/
+.cache/
